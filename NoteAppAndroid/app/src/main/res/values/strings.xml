@@ -1,0 +1,10 @@
+<resources>
+    // Begin Application
+    <string name="app_name">NoteApp</string>
+    // End Application
+
+    // Begin Menu
+    <string name="menu_add_note">Add Note</string>
+    // End Menu
+
+</resources>
