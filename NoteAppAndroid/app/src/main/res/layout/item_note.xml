@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.example.severin.noteapp.NoteViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--android:id="@+id/et_noteTitle"-->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@{vm.title}" />
+
+        <!--android:id="@+id/cl_noteDetails"-->
+        <!--<android.support.design.widget.CoordinatorLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone">-->
+
+            <!--android:id="@+id/et_noteContent"-->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="@{vm.content}" />
+        <!--</android.support.design.widget.CoordinatorLayout>-->
+    </LinearLayout>
+</layout>
