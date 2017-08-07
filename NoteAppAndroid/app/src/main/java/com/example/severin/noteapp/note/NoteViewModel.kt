@@ -11,6 +11,7 @@ data class NoteViewModel(val id: String = UUID.randomUUID().toString(), val titl
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
     override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
       dispatcher.titleModified(id, s.toString())
+      println("SEVTEST text changed")
     }
   }
 

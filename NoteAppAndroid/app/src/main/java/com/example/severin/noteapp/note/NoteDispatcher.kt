@@ -12,5 +12,6 @@ import io.reactivex.subjects.Subject
 class NoteDispatcher(val eventSub: Subject<NoteEvent>) {
   fun titleModified(id : String, newText : String) {
     eventSub.onNext(TitleChangedNoteEvent(id, newText))
+    println("SEVTEST: send ${TitleChangedNoteEvent(id, newText)} into eventSub")
   }
 }

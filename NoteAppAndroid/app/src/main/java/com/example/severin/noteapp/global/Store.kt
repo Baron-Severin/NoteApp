@@ -12,7 +12,9 @@ class Store(private val stateSub: Subject<State>,
 
   init {
     eventObs.subscribe {
+      println("SEVTEST: former state: $state")
       state = reducer.reduce(state, it)
+      println("SEVTEST: new state: $state")
       stateSub.onNext( state )
     }
     stateSub.onNext(state)
