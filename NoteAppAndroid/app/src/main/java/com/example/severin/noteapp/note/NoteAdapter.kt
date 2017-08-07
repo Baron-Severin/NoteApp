@@ -1,14 +1,31 @@
-package com.example.severin.noteapp
+package com.example.severin.noteapp.note
 
-import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.example.severin.noteapp.databinding.ItemNoteBinding
+import com.example.severin.noteapp.global.State
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 
-class NoteAdapter(var state: NoteState) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
-//  val models:  List<NoteViewModel>
+class NoteAdapter(val stateObs: Observable<State>, dispatcher: NoteDispatcher) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+
+  companion object {
+    var disposable : Disposable? = null
+    var models : List<NoteViewModel> = listOf()
+
+    fun setupSubscription(stateObs: Observable<State>, adapter: NoteAdapter?) {
+      disposable?.dispose()
+      disposable = stateObs.subscribe {
+        models = it.notes
+      }
+    }
+  }
+
+  init {
+    setupSubscription(stateObs, this)
+  }
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val context = parent.context
     val inflator = LayoutInflater.from(context)
@@ -17,11 +34,11 @@ class NoteAdapter(var state: NoteState) : RecyclerView.Adapter<NoteAdapter.ViewH
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.bind(state.notes[position])
+    holder.bind(models[position])
   }
 
   override fun getItemCount(): Int {
-    return state.notes.size
+    return models.size
   }
 
   class ViewHolder(val binding : ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -1,9 +1,12 @@
-package com.example.severin.noteapp
+package com.example.severin.noteapp.note
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
+import com.example.severin.noteapp.R
+import com.example.severin.noteapp.global.Store
+import com.example.severin.noteapp.global.State
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -12,18 +15,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class NoteActivity : AppCompatActivity() {
 
   companion object {
-    val store: NoteStore
-    val dispatcher: NoteDispatcher
+    private val store: Store
+    private val dispatcher: NoteDispatcher
+    private val stateObs : Observable<State>
 
     init {
-      val eventSub: Subject<Event> = PublishSubject.create()
-      val stateSub: Subject<NoteState> = BehaviorSubject.create()
+      val eventSub: Subject<NoteEvent> = PublishSubject.create()
       val reducer = NoteReducer()
-      store = NoteStore(stateSub, eventSub.hide(), reducer)
+      val stateSub: Subject<State> = BehaviorSubject.create()
       dispatcher = NoteDispatcher(eventSub)
+      store = Store(stateSub, eventSub.hide(), reducer, State(listOf(NoteViewModel(title = "Title", content = "Content", dispatcher = dispatcher))))
+      stateObs = stateSub.hide()
     }
   }
 
@@ -32,12 +37,8 @@ class MainActivity : AppCompatActivity() {
     setContentView(R.layout.activity_main)
     setSupportActionBar(toolbar)
 
-
-    rv_notes.adapter = NoteAdapter(store.state)
+    rv_notes.adapter = NoteAdapter(stateObs, dispatcher)
     rv_notes.layoutManager = LinearLayoutManager(this)
-
-    store.state = NoteState(listOf(NoteViewModel("TestTitle", "TestContent")))
-    rv_notes.adapter.notifyDataSetChanged()
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
